@@ -1,3 +1,8 @@
+#FORK CHANGES
+1) Update `lime.system.JNI` path
+2) Remove image attachment from android
+3) Change intent intent type to ACTION_SENDTO
+
 OpenFL MailSender extension
 =============================
 

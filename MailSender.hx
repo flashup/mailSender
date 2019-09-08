@@ -10,9 +10,10 @@ import flash.Lib;
 #end
 
 #if (android && openfl)
-import openfl.utils.JNI;
+import lime.system.JNI;
 #end
 
+import openfl.display.PNGEncoderOptions;
 import flash.utils.ByteArray;
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
@@ -69,8 +70,7 @@ class MailSender {
 	private static inline var BASE_64_ENCODINGS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	private static inline var BASE_64_PADDING = "=";
 	static inline function getB64PngData(bmp:BitmapData):String{
-
-		var b:ByteArray = bmp.encode("png");
+		var b:ByteArray = bmp.encode(new Rectangle(0, 0, bmp.width, bmp.height), new PNGEncoderOptions());
 
 		var base64:String = new haxe.crypto.BaseCode(Bytes.ofString(BASE_64_ENCODINGS)).encodeBytes(b).toString();
 

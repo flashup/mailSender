@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<ndll name="mailsender" />
+	<ndll name="mailsender" if="ios" />
 	
 	<!-- Use the following for an Android Java extension, not needed otherwise -->
-	
-	<dependency name="mailsender" path="dependencies/android" if="android" />
-	<android extension="org.haxe.extension.MailSender" />
-	
+	<section if="android">
+		<dependency name="mailsender" path="dependencies/android" />
+		<android extension="org.haxe.extension.MailSender" />
+	</section>
+
 </project>
