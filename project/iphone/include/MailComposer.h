@@ -49,6 +49,8 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
+@interface MFMailComposeViewControllerDelegate;
+
 @interface MailComposer : UIViewController <MFMailComposeViewControllerDelegate> 
 {
 }
