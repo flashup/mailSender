@@ -105,37 +105,38 @@ id rootVC = nil;
 	picker.mailComposeDelegate = self;
 	
 	[picker setSubject:subject];
-	
-	// Set up recipients
-	if ([to length] > 0){
-		NSArray *toRecipients = [to componentsSeparatedByString:@","];
-		[picker setToRecipients:toRecipients];
-	}
-	if ([cc length] > 0){
-		NSArray *ccRecipients = [cc componentsSeparatedByString:@","];
-		[picker setCcRecipients:ccRecipients];
-	}
-	if ([bcc length] > 0){
-		NSArray *bccRecipients = [bcc componentsSeparatedByString:@","];
-		[picker setBccRecipients:bccRecipients];
-	}
+	if ([MFMailComposeViewController canSendMail]) {
+        // Set up recipients
+        if ([to length] > 0){
+            NSArray *toRecipients = [to componentsSeparatedByString:@","];
+            [picker setToRecipients:toRecipients];
+        }
+        if ([cc length] > 0){
+            NSArray *ccRecipients = [cc componentsSeparatedByString:@","];
+            [picker setCcRecipients:ccRecipients];
+        }
+        if ([bcc length] > 0){
+            NSArray *bccRecipients = [bcc componentsSeparatedByString:@","];
+            [picker setBccRecipients:bccRecipients];
+        }
 
-	// Fill out the email body text
-	[picker setMessageBody:body isHTML:isHTML];
-	
-	// Attach an image to the email (if present)
-	if (imgData != NULL) {
-		[picker addAttachmentData:imgData mimeType:@"image/png" fileName:@"route"];
-	}
+        // Fill out the email body text
+        [picker setMessageBody:body isHTML:isHTML];
 
-	//id rootVC = [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] nextResponder];
-	rootVC = [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] nextResponder];
-	[rootVC presentModalViewController:picker animated:YES];
-	
-	//NSLog(@"rootVC dir %x", rootVC); 
-	//NSLog(@"rootVC obj %@", rootVC);
-	
-    [picker release];
+        // Attach an image to the email (if present)
+        if (imgData != NULL) {
+            [picker addAttachmentData:imgData mimeType:@"image/png" fileName:@"route"];
+        }
+
+        //id rootVC = [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] nextResponder];
+        rootVC = [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] nextResponder];
+        [rootVC presentModalViewController:picker animated:YES completion:NULL];
+
+        //NSLog(@"rootVC dir %x", rootVC);
+        //NSLog(@"rootVC obj %@", rootVC);
+
+        [picker release];
+    }
 }
 
 
