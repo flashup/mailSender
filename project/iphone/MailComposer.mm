@@ -81,16 +81,18 @@ id rootVC = nil;
 		// We must always check whether the current device is configured for sending emails
 		if ([mailClass canSendMail])
 		{
-			[self displayComposerSheet:subject msgBody:body msgIsHTML:isHTML sndTo:to sndCC:cc sndBCC:bcc attImgData:imgData];
+			[self displayComposerSheet:subject msgBody:body msgIsHTML:isHTML sndTo:to sndCC:cc sndBCC:bcc];
 		}
 		else
 		{
-			[self launchMailAppOnDevice];
+			// [self launchMailAppOnDevice];
+            NSLog(@"MailComposer error: user can't send emails!");
 		}
 	}
 	else
 	{
-		[self launchMailAppOnDevice];
+		// [self launchMailAppOnDevice];
+		NSLog(@"MailComposer error: mailClass is nil!");
 	}
 }
 
@@ -99,13 +101,18 @@ id rootVC = nil;
 #pragma mark Compose Mail
 
 // Displays an email composition interface inside the application. Populates all the Mail fields. 
--(void)displayComposerSheet:(NSString *)subject msgBody:(NSString *)body msgIsHTML:(BOOL)isHTML sndTo:(NSString *)to sndCC:(NSString *)cc sndBCC:(NSString *)bcc attImgData:(NSData *)imgData
+-(void)displayComposerSheet:(NSString *)subject msgBody:(NSString *)body msgIsHTML:(BOOL)isHTML sndTo:(NSString *)to sndCC:(NSString *)cc sndBCC:(NSString *)bcc
 {
 	MFMailComposeViewController *picker = [[MFMailComposeViewController alloc] init];
-	picker.mailComposeDelegate = self;
-	
-	[picker setSubject:subject];
+
 	if ([MFMailComposeViewController canSendMail]) {
+        picker.mailComposeDelegate = self;
+
+        [picker setSubject:subject];
+
+        // Fill out the email body text
+        [picker setMessageBody:body isHTML:isHTML];
+
         // Set up recipients
         if ([to length] > 0){
             NSArray *toRecipients = [to componentsSeparatedByString:@","];
@@ -120,22 +127,19 @@ id rootVC = nil;
             [picker setBccRecipients:bccRecipients];
         }
 
-        // Fill out the email body text
-        [picker setMessageBody:body isHTML:isHTML];
+        rootVC = [self topMostViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
 
-        // Attach an image to the email (if present)
-        if (imgData != NULL) {
-            [picker addAttachmentData:imgData mimeType:@"image/png" fileName:@"route"];
-        }
-
-        //id rootVC = [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] nextResponder];
-        rootVC = [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] nextResponder];
-        [rootVC presentModalViewController:picker animated:YES completion:NULL];
-
-        //NSLog(@"rootVC dir %x", rootVC);
-        //NSLog(@"rootVC obj %@", rootVC);
+        [rootVC presentViewController:picker animated:YES completion:NULL];
 
         [picker release];
+    }
+}
+
+- (UIViewController *) topMostViewController: (UIViewController *)viewController {
+    if ([viewController presentedViewController] != nil) {
+        return [self topMostViewController:viewController];
+    } else {
+        return viewController;
     }
 }
 

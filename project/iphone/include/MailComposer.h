@@ -50,8 +50,9 @@
 #import <MessageUI/MFMailComposeViewController.h>
 
 @interface MFMailComposeViewControllerDelegate;
+@end
 
-@interface MailComposer : UIViewController <MFMailComposeViewControllerDelegate> 
+@interface MailComposer : UIViewController <MFMailComposeViewControllerDelegate>
 {
 }
 
